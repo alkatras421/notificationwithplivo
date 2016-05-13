@@ -1,0 +1,34 @@
+{
+    "name": "your-name-here/NotificationWithPlivo",
+    "description": "NotificationWithPlivo plugin for CakePHP",
+    "type": "cakephp-plugin",
+    "require": {
+        "php": ">=5.4.16",
+        "cakephp/cakephp": "~3.0",
+	"plivo/plivo-php": "^1.0",
+	"cakephp/migrations": "~1.0"
+    },
+
+    "require-dev": {
+        "phpunit/phpunit": "*"
+    },
+
+    "scripts":{
+	"post-update-cmd":[
+	"NotificationWithPlivo\\Main\\Notification\\General::migration"]
+    },
+
+    "autoload": {
+
+        "psr-4": {
+            "NotificationWithPlivo\\": "src"
+        }
+    },
+
+    "autoload-dev": {
+        "psr-4": {
+            "NotificationWithPlivo\\Test\\": "tests",
+            "Cake\\Test\\": "./vendor/cakephp/cakephp/tests"
+        }
+    }
+}
