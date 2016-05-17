@@ -107,7 +107,8 @@ Class SMS
                 if($interval->d >= 3)
                 {
                     $id = $this->notification->get($list['id']);
-                    $id->stat = 'error';
+                    $id->stat = 'unavailable';
+                    $this->notification->save($id);
                 }
                 else{
                     $record_query = $this->notif_sms->find()
@@ -125,6 +126,47 @@ Class SMS
             }
         }
     }
+    
+    public function checkUn()
+    {
+        $query = $this->notification->find()
+        ->select()
+        ->where(['stat' => 'unavailable'])
+        ->andWhere(function ($exp) {
+            return $exp
+                    ->lte('date', new \DateTime('now',  new \DateTimeZone('Asia/Novosibirsk')));
+        }); 
+        
+        foreach($query as $list) 
+        {
+            $record_query = $this->notif_sms->find()
+                        -> select()
+                        -> where(['id_notif'=> $list['id']])
+                        ->first();
+
+            $param = array ('record_id' => $record_query->record_id);
+            $response_detail = $this->plivoInst->get_message($param);
+            
+            if($response_detail['response']['message_state'] == 'delivered')
+            {
+                $id = $this->notification->get($list['id']);
+
+                $id->stat = $response_detail['response']['message_state'];
+                $this->notification->save($id); 
+            }
+            
+            elseif($response_detail['response']['message_state'] == 'undelivered')
+            {
+                $id = $this->notification->get($list['id']);
+
+                $id->stat = $response_detail['response']['message_state'];
+                $this->notification->save($id); 
+            }
+        
+        }
+    }
+        
+    
 }
 /* 
  * To change this license header, choose License Headers in Project Properties.

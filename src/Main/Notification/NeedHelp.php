@@ -64,7 +64,7 @@ Class NeedHelp
             $row = $query->first();
             $result_email->id_notif = $recursiveEntity->id;
             $result_email->theme = $row->theme;
-            $result_email->sender_name = $row->sender_name;
+            $result_email->subject = $row->subject;
             $this->notif_email->save($result_email);
         }
     }

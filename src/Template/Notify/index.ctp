@@ -1,5 +1,4 @@
 <?php
-echo $this->Form->create(null,  ['url' => ['controller' => 'Notify', 'action' => 'index']]);
 
 $resultTableEmail=$this->get('email');
 $resultTableSMS=$this->get('sms');
@@ -44,7 +43,7 @@ $resultTableSMS=$this->get('sms');
             <?= $notifEmail['theme'] ?>
         </td>
         <td>
-            <?= $notifEmail['sender_name'] ?>
+            <?= $notifEmail['subject'] ?>
         </td>
         <td>
             <?= $notifEmail['stat'] ?>

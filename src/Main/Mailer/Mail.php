@@ -42,12 +42,12 @@ Class Mail
             $this->notification->save($result_notif);
             $result_email = $this->notif_email->newEntity(['id_notif' => $result_notif->id,
                                                            'theme'=> $query['theme'],
-                                                           'sender_name'=>$query['sender_name']]);
+                                                           'subject'=>$query['subject']]);
             $this->notif_email->save($result_email); 
             
             $param = array(
                 'sender' => $list['sender'],
-                'name' => $query['sender_name'],
+                'name' => $query['subject'],
                 'to' => $dst,
                 'theme' => $query['theme'],
                 'text'=> $list['text']);

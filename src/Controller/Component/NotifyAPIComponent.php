@@ -14,10 +14,7 @@ use Cake\Controller\Component;
 
 class NotifyAPIComponent extends Component
 {     
-    public $SMS;
-    public $email;
-    public $general;
-    
+
     public function __construct() 
     {
         $this->SMS = new SMS();
@@ -45,7 +42,7 @@ class NotifyAPIComponent extends Component
      * address - адресс отправки.
      * sender - отправитель.
      * theme - тема сообщения.
-     * sender_name - то, что помещается в кавычки "".
+     * subject - имя/наименование отправителя .
      * text - текст сообщения.
      */
     public function sendEmailMessage($param)
@@ -62,7 +59,8 @@ class NotifyAPIComponent extends Component
      * 'sender'
      * Так же если транспортом является email, то необходимо указать theme
      * К необязательным полям относятся:
-     * 'date' и 'recursive'.
+     * 'date', 'recursive' и 'subject'.
+     * 'subject' можно добавить, если нотификация отправляется через email. 
      */
     public function addToBase($param)
     {
@@ -80,6 +78,9 @@ class NotifyAPIComponent extends Component
     
     /*
      * Функция отображения записей из базы данных.
+     * Необходимо передавать способ отправки.
+     * После выполнения возвращается ассоциативный массив со всей информацией о
+     * нотификациях, указанного способа доставки.
      */
     public function showBase($param)
     {
@@ -87,7 +88,9 @@ class NotifyAPIComponent extends Component
     }
     /*
      * Функция редактирования нотификации.
-     * Необходимо передавать id и изменения.
+     * Необходимо передавать id и необходимые изменения изменения
+     * Пример:
+     * $param = array ('id' => '1', 'text' => 'example', 'theme' => 'my amazing plugin').
      */
     public function editNotification($param)
     {
@@ -105,7 +108,7 @@ class NotifyAPIComponent extends Component
         $this->general->dN($param);
     }
     /*
-     * Обновление статусов нотификации в базе данных.
+     * Обновление статусов смс нотификации в базе данных.
      */
     public function updateStat()
     {
@@ -123,6 +126,11 @@ class NotifyAPIComponent extends Component
     }
     /*
      * Функция отмены отправки сообщения.
+     * Передаваемые ключи:
+     * id - отмена/возобновление конкретной нотификации
+     * date - отмена/возобновление нотификаций до определенного момента времени
+     * rangeBegin и rangeEnd - диапазон времени, в период которого необходимо отменить/возобновить статус нотификации.
+     * stat - передавать строгое значение статуса. Если не указывать stat, то значения статуса будут меняться на противоположные.
      */
     public function manipulationWithStat($param)
     {
@@ -141,8 +149,6 @@ class NotifyAPIComponent extends Component
      * Всякая шелуха:
      * 
      * 
-     */
-
-    
+     */    
     protected $_defaultConfig = [];
 }

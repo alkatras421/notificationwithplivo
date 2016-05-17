@@ -7,7 +7,6 @@ use NotificationWithPlivo\Main\Notification\NeedHelp;
 use Migrations\Migrations;
 use Cake\Network\Exception\NotFoundException;
 use Cake\ORM\TableRegistry;
-use Composer\Script\Event;
  
 Class General
 {
@@ -56,12 +55,12 @@ Class General
             {
                 $result_email->theme = $param['theme'];
                 
-                if(key_exists('sender_name',$param))
+                if(key_exists('subject',$param))
                 {
-                    $result_email->sender_name = $param['sender_name'];
+                    $result_email->subject = $param['subject'];
                 }
                 else{
-                    $result_email->sender_name = $param['sender'];
+                    $result_email->subject = $param['sender'];
                 }
                 
                 $this->notification->save($result_notif);
@@ -136,7 +135,7 @@ Class General
                 
                 $param = array(
                     'sender' => $list['sender'],
-                    'name' => $query['sender_name'],
+                    'name' => $query['subject'],
                     'to' => $list['address'],
                     'theme' => $query['theme'],
                     'text'=> $list['text']);
@@ -262,9 +261,9 @@ Class General
                     {
                         $row->theme = $param['theme'];
                     }
-                    if(key_exists('sender_name', $param))
+                    if(key_exists('subject', $param))
                     {
-                        $row->sender_name = $param['sender_name'];
+                        $row->subject = $param['subject'];
                     }
                     $this->notif_email->save($row);
                 }
@@ -277,8 +276,9 @@ Class General
     {
         if(key_exists('id', $param))
         {
-            $query = $this->notification->get($param['id']);
-
+            $query = $this->notification->find()
+                ->select()
+                ->where(['id' => $param['id']]);
             $this->help->manipulationHelp($query,$param);
         }
         
