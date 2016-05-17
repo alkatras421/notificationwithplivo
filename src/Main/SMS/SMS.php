@@ -9,12 +9,12 @@ use Symfony\Component\Yaml\Yaml;
 
 Class SMS 
 {   
-    #* * * * * cd /var/www/html/Notifiations_plugin && bin/cake NotificationWithPlivo.Round
+    #* * * * * cd path/to/project && bin/cake NotificationWithPlivo.Round
     public $plivoInst;
     
     public function __construct() 
     {
-        $plivo = Yaml::parse(file_get_contents(dirname(__FILE__).'/../../../config/PlivoConf.yml'));
+        $plivo = Yaml::parse(file_get_contents(APP.'/../config/PlivoConf.yml'));
         $this->plivoInst = new RestAPI($plivo['auth_id'], $plivo['auth_token']);
         
         $this->notification = TableRegistry::get('notifications');
