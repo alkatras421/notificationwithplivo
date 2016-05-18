@@ -150,6 +150,14 @@ Class NeedHelp
             throw new NotFoundException('The \'transport\' is incorrectly specified.');
         }
         
+    }
+    
+    public function checkUnHelp($list,$response_detail)
+    {
+        $id = $this->notification->get($list['id']);
+
+        $id->stat = $response_detail['response']['message_state'];
+        $this->notification->save($id); 
     } 
 }
 /* 

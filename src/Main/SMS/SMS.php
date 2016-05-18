@@ -165,9 +165,40 @@ Class SMS
         
         }
     }
-        
     
+    public function checkUnavailable()
+    {
+        $query = $this->notification->find()
+        ->select()
+        ->where(['stat' => 'unavailable'])
+        ->andWhere(function ($exp) {
+            return $exp
+                    ->lte('date', new \DateTime('now',  new \DateTimeZone('Asia/Novosibirsk')));
+        }); 
+        
+        foreach($query as $list) 
+        {
+            $record_query = $this->notif_sms->find()
+                        -> select()
+                        -> where(['id_notif'=> $list['id']])
+                        ->first();
+
+            $param = array ('record_id' => $record_query->record_id);
+            $response_detail = $this->plivoInst->get_message($param);
+            
+            if($response_detail['response']['message_state'] == 'delivered')
+            {
+                $this->help->checkUnHelp($list,$response_detail);
+            }
+            
+            elseif($response_detail['response']['message_state'] == 'undelivered')
+            {
+                $this->help->checkUnHelp($list,$response_detail);
+            }
+        }
+    }
 }
+    
 /* 
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
