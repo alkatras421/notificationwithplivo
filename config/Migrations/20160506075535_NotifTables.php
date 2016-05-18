@@ -65,7 +65,7 @@ class NotifTables extends AbstractMigration
         $tableEmail->addColumn('theme', 'string', [
             'limit' => 100
         ]);
-        $tableEmail->addColumn('sender_name', 'string', [
+        $tableEmail->addColumn('subject', 'string', [
             'limit' => 200
         ]);
         $tableEmail->create();
