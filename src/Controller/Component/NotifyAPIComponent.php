@@ -136,6 +136,11 @@ class NotifyAPIComponent extends Component
     {
         $this->general->manipulation($param);
     }
+    
+    public function checkUnavailableStat()
+    {
+		$this->SMS->checkUnavailable();
+	}
     public function migrat()
     {
         $this->general->migration();
