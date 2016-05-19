@@ -1,4 +1,4 @@
-<?php$resultTableEmail=$this->get('email');?>
+<?php $resultTableEmail = $this->get('email'); ?>
 
 <?php if($resultTableEmail != NULL): ?>
 <h3>EMAIL</h3>
@@ -48,9 +48,5 @@
     <?php endforeach; ?>
 </table>
 <?php endif;?>
-/* 
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
+
 
