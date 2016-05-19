@@ -91,7 +91,7 @@ $resultTableSMS=$this->get('sms');
             <?= $notifSMS['record_id'] ?>
         </td>
         <td>
-            <?= $notifSMS['statusш'] ?>
+            <?= $notifSMS['status'] ?>
         </td>
     </tr>
 

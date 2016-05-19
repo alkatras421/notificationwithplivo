@@ -19,10 +19,6 @@ class NotifyController extends AppController
         $s = $this->NotifyAPI->showBase($paramS);
         $this->set('email', $e);
         $this->set('sms', $s);
-        $param = array('id' => '3', 'subject' => 'checking');
-        $this->NotifyAPI->editNotification($param);
-        #$this->NotifyAPI->round();
-        $this->NotifyAPI->updateStatus();
     }
     
     public function send()
