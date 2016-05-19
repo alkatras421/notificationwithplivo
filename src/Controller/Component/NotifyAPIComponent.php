@@ -64,7 +64,7 @@ class NotifyAPIComponent extends Component
      */
     public function addToBase($param)
     {
-        $this->general->addTB($param);
+        return $this->general->addTB($param);
     }
     
     /*
@@ -139,8 +139,9 @@ class NotifyAPIComponent extends Component
     
     public function checkUnavailableStatus()
     {
-		$this->SMS->checkUnavailable();
-	}
+	$this->SMS->checkUnavailable();
+    }
+    
     public function migrat()
     {
         $this->general->migration();

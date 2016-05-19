@@ -66,6 +66,7 @@ Class General
                 $this->notification->save($result_notif);
                 $result_email->notification_id = $result_notif->id;
                 $this->notif_email->save($result_email);
+                return $result_notif->id;               
             }
             elseif(($param['transport'] == 'email') and (!key_exists('subject',$param)))
             {
@@ -77,6 +78,7 @@ Class General
                 $this->notification->save($result_notif);
                 $result_sms->notification_id = $result_notif->id;
                 $this->notif_sms->save($result_sms);
+                return $result_notif->id;
             }
             else{
                 throw new \Exception('The \'address\' is incorrectly specified');
