@@ -51,7 +51,7 @@ Class General
         }
         if((key_exists('transport', $param)) and ($param['transport'] == 'email' || $param['transport'] == 'sms'))
         {
-            if(($param['transport'] == 'email') and (key_exists('subject',$param)))
+            if(($param['transport'] == 'email') and (key_exists('subject',$param)) and (preg_match('/.+@.+\..+/i', $param['address'])))
             {
                 $result_email->subject = $param['subject'];
                 
@@ -72,7 +72,10 @@ Class General
             {
                 throw new NotFoundException('The \'subject\' is not exist');
             }
-            
+            elseif(($param['transport'] == 'email') and (!preg_match('/.+@.+\..+/i', $param['address'])))
+            {
+                throw new \Exception('The \'address\' is incorrectly specified');
+            }
             elseif(($param['transport'] == 'sms') and preg_match('^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$^',$param['address']))
             {
                 $this->notification->save($result_notif);
