@@ -41,8 +41,8 @@ class NotifyAPIComponent extends Component
      * Отправка email письма. Необходимо передавать:
      * address - адресс отправки.
      * sender - отправитель.
-     * theme - тема сообщения.
-     * subject - имя/наименование отправителя .
+     * subject - тема сообщения.
+     * sender_name - имя/наименование отправителя .
      * text - текст сообщения.
      */
     public function sendEmailMessage($param)
@@ -57,10 +57,10 @@ class NotifyAPIComponent extends Component
      * 'text'
      * 'address'
      * 'sender'
-     * Так же если транспортом является email, то необходимо указать theme
+     * Так же если транспортом является email, то необходимо указать subject
      * К необязательным полям относятся:
-     * 'date', 'recursive' и 'subject'.
-     * 'subject' можно добавить, если нотификация отправляется через email. 
+     * 'date', 'recursive' и 'sender_name'.
+     * 'sender_name' можно добавить, если нотификация отправляется через email. 
      */
     public function addToBase($param)
     {
@@ -90,7 +90,7 @@ class NotifyAPIComponent extends Component
      * Функция редактирования нотификации.
      * Необходимо передавать id и необходимые изменения изменения
      * Пример:
-     * $param = array ('id' => '1', 'text' => 'example', 'theme' => 'my amazing plugin').
+     * $param = array ('id' => '1', 'text' => 'example', 'subject' => 'my amazing plugin').
      */
     public function editNotification($param)
     {
@@ -101,7 +101,7 @@ class NotifyAPIComponent extends Component
      * Функция удаления записей из базы данных по атрибуту.
      * 'id' - удаление конкретной записи по определенному id.
      * 'date' - удаление записей до определенного момента времени.
-     * 'stat' - удаление записей с определенным статусом. 
+     * 'status' - удаление записей с определенным статусом. 
      */
     public function deleteNotification($param)
     {
@@ -110,9 +110,9 @@ class NotifyAPIComponent extends Component
     /*
      * Обновление статусов смс нотификации в базе данных.
      */
-    public function updateStat()
+    public function updateStatus()
     {
-        $this->SMS->upStat();
+        $this->SMS->upStatus();
     }
     /*
      * Отправка sms письма. Необходимо передавать:
@@ -130,14 +130,14 @@ class NotifyAPIComponent extends Component
      * id - отмена/возобновление конкретной нотификации
      * date - отмена/возобновление нотификаций до определенного момента времени
      * rangeBegin и rangeEnd - диапазон времени, в период которого необходимо отменить/возобновить статус нотификации.
-     * stat - передавать строгое значение статуса. Если не указывать stat, то значения статуса будут меняться на противоположные.
+     * status - передавать строгое значение статуса. Если не указывать status, то значения статуса будут меняться на противоположные.
      */
-    public function manipulationWithStat($param)
+    public function manipulationWithStatus($param)
     {
         $this->general->manipulation($param);
     }
     
-    public function checkUnavailableStat()
+    public function checkUnavailableStatus()
     {
 		$this->SMS->checkUnavailable();
 	}

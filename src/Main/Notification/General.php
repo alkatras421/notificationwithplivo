@@ -17,8 +17,8 @@ Class General
         $this->help = new NeedHelp();
         
         $this->notification = TableRegistry::get('notifications');
-        $this->notif_sms = TableRegistry::get('sms_notif');
-        $this->notif_email = TableRegistry::get('email_notif');
+        $this->notif_sms = TableRegistry::get('sms_notification');
+        $this->notif_email = TableRegistry::get('email_notification');
         
     }
    
@@ -31,7 +31,7 @@ Class General
                                              'text' => $param['text'],
                                              'address' => $param['address'],
                                              'sender' => $param['sender'],
-                                             'stat' => 'expect',
+                                             'status' => 'expect',
                                              
             ]);
         
@@ -51,31 +51,31 @@ Class General
         }
         if((key_exists('transport', $param)) and ($param['transport'] == 'email' || $param['transport'] == 'sms'))
         {
-            if(($param['transport'] == 'email') and (key_exists('theme',$param)))
+            if(($param['transport'] == 'email') and (key_exists('subject',$param)))
             {
-                $result_email->theme = $param['theme'];
+                $result_email->subject = $param['subject'];
                 
-                if(key_exists('subject',$param))
+                if(key_exists('sender_name',$param))
                 {
-                    $result_email->subject = $param['subject'];
+                    $result_email->sender_name = $param['sender_name'];
                 }
                 else{
-                    $result_email->subject = $param['sender'];
+                    $result_email->sender_name = $param['sender'];
                 }
                 
                 $this->notification->save($result_notif);
-                $result_email->id_notif = $result_notif->id;
+                $result_email->notification_id = $result_notif->id;
                 $this->notif_email->save($result_email);
             }
-            elseif(($param['transport'] == 'email') and (!key_exists('theme',$param)))
+            elseif(($param['transport'] == 'email') and (!key_exists('subject',$param)))
             {
-                throw new NotFoundException('The \'theme\' is not exist');
+                throw new NotFoundException('The \'subject\' is not exist');
             }
             
             elseif(($param['transport'] == 'sms') and preg_match('^((8|\+7)[\- ]?)?(\(?\d{3}\)?[\- ]?)?[\d\- ]{7,10}$^',$param['address']))
             {
                 $this->notification->save($result_notif);
-                $result_sms->id_notif = $result_notif->id;
+                $result_sms->notification_id = $result_notif->id;
                 $this->notif_sms->save($result_sms);
             }
             else{
@@ -98,7 +98,7 @@ Class General
             });
         
         foreach($query as $list) {
-            if ($list['stat']=='expect')
+            if ($list['status']=='expect')
             {
                 $this->initiate($list);
             }
@@ -130,20 +130,20 @@ Class General
             else{
             $query = $this->notif_email->find()
                 -> select()
-                -> where(['id_notif'=> $list['id']])
+                -> where(['notification_id'=> $list['id']])
                 -> first();
                 
                 $param = array(
                     'sender' => $list['sender'],
-                    'name' => $query['subject'],
+                    'name' => $query['sender_name'],
                     'to' => $list['address'],
-                    'theme' => $query['theme'],
+                    'theme' => $query['subject'],
                     'text'=> $list['text']);
                 $this->email->sendEM($param);
                 
-                $stat = $this->notification->get($list['id']);
-                $stat->stat = 'delivered';
-                $this->notification->save($stat); 
+                $status = $this->notification->get($list['id']);
+                $status->status = 'delivered';
+                $this->notification->save($status); 
             }
         }                        
     }
@@ -195,12 +195,12 @@ Class General
                 }
             }
         }
-        elseif(key_exists('stat',$param)){
+        elseif(key_exists('status',$param)){
             
             $query = $this->notification->find()
                 -> select()
                 -> hydrate(false)
-                -> where(['stat'=> $param['stat']]);
+                -> where(['status'=> $param['status']]);
 
             foreach($query as $ndata)
             {
@@ -251,19 +251,19 @@ Class General
             
             $emailQ = $this->notif_email->find()
                 -> select()
-                -> where(['id_notif' => $param['id']]);
+                -> where(['notification_id' => $param['id']]);
             
             foreach($emailQ as $row)
             {
                 if($row!=NULL)
                 {
-                    if(key_exists('theme', $param))
-                    {
-                        $row->theme = $param['theme'];
-                    }
                     if(key_exists('subject', $param))
                     {
                         $row->subject = $param['subject'];
+                    }
+                    if(key_exists('sender_name', $param))
+                    {
+                        $row->sender_name = $param['sender_name'];
                     }
                     $this->notif_email->save($row);
                 }

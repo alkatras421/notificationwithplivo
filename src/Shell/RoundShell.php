@@ -13,7 +13,7 @@ Class RoundShell extends Shell
         $general = new General();
         $sms = new SMS();
         $general->roundDB();
-        $sms->upStat();
+        $sms->upStatus();
     }
 }
 /* 

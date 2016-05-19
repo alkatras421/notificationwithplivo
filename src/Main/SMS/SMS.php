@@ -14,11 +14,11 @@ Class SMS
     
     public function __construct() 
     {
-        $plivo = Yaml::parse(file_get_contents(APP.'/../config/PlivoConf.yml'));
+        $plivo = Yaml::parse(file_get_contents(APP.'/../config/PlivoConfig.yml'));
         $this->plivoInst = new RestAPI($plivo['auth_id'], $plivo['auth_token']);
         
         $this->notification = TableRegistry::get('notifications');
-        $this->notif_sms = TableRegistry::get('sms_notif');
+        $this->notif_sms = TableRegistry::get('sms_notification');
         $this->help = new NeedHelp(); 
     }
     
@@ -56,11 +56,11 @@ Class SMS
                 
                 $record = array('record_id'=> $response_send['response']['message_uuid'][0]);
                 $response_detail = $this->plivoInst->get_message($record);
-                $result_notif->stat = $response_detail['response']['message_state'];
+                $result_notif->status = $response_detail['response']['message_state'];
                 
                 $this->notification->save($result_notif);
                 $result_sms->record_id = $record['record_id'];
-                $result_sms->id_notif = $result_notif->id;
+                $result_sms->notification_id = $result_notif->id;
                 $this->notif_sms->save($result_sms);
             }
         }
@@ -71,11 +71,11 @@ Class SMS
 
             $query = $this->notif_sms->find();
             $result = $query->select()
-                  ->where(['id_notif' => $list['id']])->first();
+                  ->where(['notification_id' => $list['id']])->first();
             $result->record_id = $response_send['response']['message_uuid'][0];
             
             $id = $this->notification->get($list['id']);
-            $id->stat = $response_detail['response']['message_state'];
+            $id->status = $response_detail['response']['message_state'];
             
             $this->notification->save($id);
             $this->notif_sms->save($result);
@@ -88,7 +88,7 @@ Class SMS
         return $response;
     }
     
-    public function upStat()
+    public function upStatus()
     {
         
         $query = $this->notification->find();
@@ -100,27 +100,27 @@ Class SMS
         
         foreach($query as $list) 
         {
-            if ($list['stat'] == 'sent')
+            if ($list['status'] == 'sent')
             {
                 $interval = date_diff(new \DateTime('now',  new \DateTimeZone('Asia/Novosibirsk')), $list['date']);
                 
                 if($interval->d >= 3)
                 {
                     $id = $this->notification->get($list['id']);
-                    $id->stat = 'unavailable';
+                    $id->status = 'unavailable';
                     $this->notification->save($id);
                 }
                 else{
                     $record_query = $this->notif_sms->find()
                                 -> select()
-                                -> where(['id_notif'=> $list['id']])
+                                -> where(['notification_id'=> $list['id']])
                                 ->first();
                 
                     $param = array ('record_id' => $record_query->record_id);
                     $response_detail = $this->plivoInst->get_message($param);
                     $id = $this->notification->get($list['id']);
 
-                    $id->stat = $response_detail['response']['message_state'];
+                    $id->status = $response_detail['response']['message_state'];
                     $this->notification->save($id); 
                 }
             }
@@ -131,7 +131,7 @@ Class SMS
     {
         $query = $this->notification->find()
         ->select()
-        ->where(['stat' => 'unavailable'])
+        ->where(['status' => 'unavailable'])
         ->andWhere(function ($exp) {
             return $exp
                     ->lte('date', new \DateTime('now',  new \DateTimeZone('Asia/Novosibirsk')));
@@ -141,7 +141,7 @@ Class SMS
         {
             $record_query = $this->notif_sms->find()
                         -> select()
-                        -> where(['id_notif'=> $list['id']])
+                        -> where(['notification_id'=> $list['id']])
                         ->first();
 
             $param = array ('record_id' => $record_query->record_id);
@@ -151,7 +151,7 @@ Class SMS
             {
                 $id = $this->notification->get($list['id']);
 
-                $id->stat = $response_detail['response']['message_state'];
+                $id->status = $response_detail['response']['message_state'];
                 $this->notification->save($id); 
             }
             
@@ -159,7 +159,7 @@ Class SMS
             {
                 $id = $this->notification->get($list['id']);
 
-                $id->stat = $response_detail['response']['message_state'];
+                $id->status = $response_detail['response']['message_state'];
                 $this->notification->save($id); 
             }
         
@@ -170,7 +170,7 @@ Class SMS
     {
         $query = $this->notification->find()
         ->select()
-        ->where(['stat' => 'unavailable'])
+        ->where(['status' => 'unavailable'])
         ->andWhere(function ($exp) {
             return $exp
                     ->lte('date', new \DateTime('now',  new \DateTimeZone('Asia/Novosibirsk')));
@@ -180,7 +180,7 @@ Class SMS
         {
             $record_query = $this->notif_sms->find()
                         -> select()
-                        -> where(['id_notif'=> $list['id']])
+                        -> where(['notification_id'=> $list['id']])
                         ->first();
 
             $param = array ('record_id' => $record_query->record_id);

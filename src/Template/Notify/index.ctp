@@ -14,15 +14,15 @@ $resultTableSMS=$this->get('sms');
         <th>sender</th>
         <th>date</th>
         <th>recursive</th>
-        <th>theme</th>
         <th>subject</th>
+        <th>name</th>
         <th>status</th>
     </tr>
     
     <?php foreach ($resultTableEmail as $notifEmail): ?>
     <tr>
         <td>
-            <?= $notifEmail['id_notif'] ?>
+            <?= $notifEmail['notification_id'] ?>
         </td>
         <td>
             <?= $notifEmail['text'] ?>
@@ -40,13 +40,13 @@ $resultTableSMS=$this->get('sms');
             <?= $notifEmail['recursive'] ?>
         </td>
         <td>
-            <?= $notifEmail['theme'] ?>
-        </td>
-        <td>
             <?= $notifEmail['subject'] ?>
         </td>
         <td>
-            <?= $notifEmail['stat'] ?>
+            <?= $notifEmail['sender_name'] ?>
+        </td>
+        <td>
+            <?= $notifEmail['status'] ?>
         </td>
     </tr>
     <?php endforeach; ?>
@@ -70,7 +70,7 @@ $resultTableSMS=$this->get('sms');
         
     <tr>
         <td>
-            <?= $notifSMS['id_notif'] ?>
+            <?= $notifSMS['notification_id'] ?>
         </td>
         <td>
             <?= $notifSMS['text'] ?>
@@ -91,7 +91,7 @@ $resultTableSMS=$this->get('sms');
             <?= $notifSMS['record_id'] ?>
         </td>
         <td>
-            <?= $notifSMS['stat'] ?>
+            <?= $notifSMS['statusш'] ?>
         </td>
     </tr>
 

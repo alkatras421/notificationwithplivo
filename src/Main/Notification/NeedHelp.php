@@ -8,8 +8,8 @@ Class NeedHelp
     public function __construct() {
         
         $this->notification = TableRegistry::get('notifications');
-        $this->notif_sms = TableRegistry::get('sms_notif');
-        $this->notif_email = TableRegistry::get('email_notif');
+        $this->notif_sms = TableRegistry::get('sms_notification');
+        $this->notif_email = TableRegistry::get('email_notification');
     }
 
     public function delHelp($ndata)
@@ -18,7 +18,7 @@ Class NeedHelp
             {
                 $query = $this->notif_sms->query();
                 $query->delete()
-                  ->where(['id_notif' => $ndata['id']])
+                  ->where(['notification_id' => $ndata['id']])
                   ->execute();
             }
 
@@ -26,7 +26,7 @@ Class NeedHelp
             {
                 $query = $this->notif_email->query();
                 $query->delete()
-                      ->where(['id_notif' => $ndata['id']])
+                      ->where(['notification_id' => $ndata['id']])
                       ->execute();
             }
             
@@ -46,25 +46,25 @@ Class NeedHelp
                 'address' => $list['address'],
                 'recursive' => $list['recursive'],
                 'sender' => $list['sender'],
-                'stat' => 'expect'
+                'status' => 'expect'
                 ]);
         $this->notification->save($recursiveEntity);
         
         if($list['transport']=='sms')
         {
-            $result_sms->id_notif = $recursiveEntity->id;
+            $result_sms->notification_id = $recursiveEntity->id;
             $this->notif_sms->save($result_sms);
         }
         elseif($list['transport']=='email'){
             
             $query = $this->notif_email->find();
             $query -> select();
-            $query -> where(['id_notif'=> $list['id']]);
+            $query -> where(['notification_id'=> $list['id']]);
             
             $row = $query->first();
-            $result_email->id_notif = $recursiveEntity->id;
-            $result_email->theme = $row->theme;
+            $result_email->notification_id = $recursiveEntity->id;
             $result_email->subject = $row->subject;
+            $result_email->sender_name = $row->sender_name;
             $this->notif_email->save($result_email);
         }
     }
@@ -72,17 +72,17 @@ Class NeedHelp
     {
         foreach($query as $list)
         {
-            if(key_exists('stat', $param))
+            if(key_exists('status', $param))
             {
-                $list->stat = $param['stat'];
+                $list->status = $param['status'];
             }
-            elseif($list['stat'] == 'expect')
+            elseif($list['status'] == 'expect')
             {
-                $list->stat = 'cancel';
+                $list->status = 'cancel';
             }
-            elseif($list['stat'] == 'cancel')
+            elseif($list['status'] == 'cancel')
             {
-                $list->stat = 'expect';
+                $list->status = 'expect';
             }
             if(($list['date'] < new \DateTime('now')) and (key_exists('datetime',$param)))
             {
@@ -99,7 +99,7 @@ Class NeedHelp
     {
         if(key_exists('transport', $param))
         {
-            if((!key_exists('stat', $param)) and (!key_exists('date', $param)) and ((!key_exists('rangeBegin', $param)) and (!key_exists('rangeEnd', $param))))
+            if((!key_exists('status', $param)) and (!key_exists('date', $param)) and ((!key_exists('rangeBegin', $param)) and (!key_exists('rangeEnd', $param))))
             {
                 $query = $this->notification->find()
                         ->hydrate(false)
@@ -108,12 +108,12 @@ Class NeedHelp
                         ->toArray();
                 return $query;
             }
-            elseif(key_exists('stat', $param))
+            elseif(key_exists('status', $param))
             {
                 $query = $this->notification->find()
                         ->hydrate(false)
                         ->select()
-                        ->where(['stat'=> $param['stat']])
+                        ->where(['status'=> $param['status']])
                         ->andWhere(['transport' => $param['transport']])
                         ->toArray();
                 return $query;
@@ -156,7 +156,7 @@ Class NeedHelp
     {
         $id = $this->notification->get($list['id']);
 
-        $id->stat = $response_detail['response']['message_state'];
+        $id->status = $response_detail['response']['message_state'];
         $this->notification->save($id); 
     } 
 }

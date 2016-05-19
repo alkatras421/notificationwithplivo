@@ -19,10 +19,10 @@ class NotifyController extends AppController
         $s = $this->NotifyAPI->showBase($paramS);
         $this->set('email', $e);
         $this->set('sms', $s);
-        $param = array('id' => '3', 'theme' => 'checking');
+        $param = array('id' => '3', 'subject' => 'checking');
         $this->NotifyAPI->editNotification($param);
         #$this->NotifyAPI->round();
-        $this->NotifyAPI->updateStat();
+        $this->NotifyAPI->updateStatus();
     }
     
     public function send()
@@ -39,7 +39,7 @@ class NotifyController extends AppController
         $params = array(
             'transport' => 'email',
             'text' => 'sad',
-            'theme' => 'work?',
+            'subject' => 'work?',
             'address' => 'alkatras421@mail.ru',
             'sender' => 'alkatras421@gmail.ru'
         );

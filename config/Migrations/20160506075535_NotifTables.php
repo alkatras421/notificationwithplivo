@@ -36,13 +36,13 @@ class NotifTables extends AbstractMigration
         $tableNotif->addColumn('status', 'text');
         $tableNotif->create();
         
-        $tableSMS =$this->table('sms_notif',['id' => false, 'primary_key' => ['id']]);
+        $tableSMS =$this->table('sms_notification',['id' => false, 'primary_key' => ['id']]);
         $tableSMS
             ->addColumn('id', 'integer', [
                 'autoIncrement' => true,
                 'limit' => 11
             ]);
-        $tableSMS->addColumn('id_notif', 'integer', [
+        $tableSMS->addColumn('notification_id', 'integer', [
              'default' => null,
             'limit' => 11
         ]);
@@ -53,19 +53,19 @@ class NotifTables extends AbstractMigration
         ]);
         $tableSMS->create();
         
-        $tableEmail =$this->table('email_notif',['id' => false, 'primary_key' => ['id']]);
+        $tableEmail =$this->table('email_notification',['id' => false, 'primary_key' => ['id']]);
         $tableEmail
             ->addColumn('id', 'integer', [
                 'autoIncrement' => true,
                 'limit' => 11
             ]);
-        $tableEmail->addColumn('id_notif', 'integer', [
+        $tableEmail->addColumn('notification_id', 'integer', [
             'limit' => 11
         ]);
-        $tableEmail->addColumn('theme', 'string', [
+        $tableEmail->addColumn('subject', 'string', [
             'limit' => 100
         ]);
-        $tableEmail->addColumn('subject', 'string', [
+        $tableEmail->addColumn('sender_name', 'string', [
             'limit' => 200
         ]);
         $tableEmail->create();

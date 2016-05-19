@@ -11,8 +11,8 @@ Class Mail
     public function __construct() 
     {
         $this->notification = TableRegistry::get('notifications');
-        $this->notif_sms = TableRegistry::get('sms_notif');
-        $this->notif_email = TableRegistry::get('email_notif');
+        $this->notif_sms = TableRegistry::get('sms_notification');
+        $this->notif_email = TableRegistry::get('email_notification');
         
         $this->help = new NeedHelp();
     }
@@ -21,7 +21,7 @@ Class Mail
     {
         $query = $this->notif_email->find()
             -> select()
-            -> where(['id_notif'=> $list['id']])
+            -> where(['notification_id'=> $list['id']])
             -> first();
         
         $this->help->delHelp($list);
@@ -37,19 +37,19 @@ Class Mail
                                          'sender' => $list['sender'],
                                          'date' => $list['date'],
                                          'recursive' => $list['recursive'],
-                                         'stat' => 'delivered'
+                                         'status' => 'delivered'
                 ]);
             $this->notification->save($result_notif);
-            $result_email = $this->notif_email->newEntity(['id_notif' => $result_notif->id,
-                                                           'theme'=> $query['theme'],
-                                                           'subject'=>$query['subject']]);
+            $result_email = $this->notif_email->newEntity(['notification_id' => $result_notif->id,
+                                                           'subject'=> $query['subject'],
+                                                           'sender_name'=>$query['sender_name']]);
             $this->notif_email->save($result_email); 
             
             $param = array(
                 'sender' => $list['sender'],
-                'name' => $query['subject'],
+                'name' => $query['sender_name'],
                 'to' => $dst,
-                'theme' => $query['theme'],
+                'theme' => $query['subject'],
                 'text'=> $list['text']);
             $this->sendEM($param);
         }
@@ -60,7 +60,7 @@ Class Mail
         $email = new Email('default');
         $email->from([$param['sender'] => $param['name']])
               ->to($param['to'])
-              ->subject($param['theme'])
+              ->subject($param['subject'])
               ->send($param['text']);
         
         return $email;    
