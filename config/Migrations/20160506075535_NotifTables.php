@@ -33,7 +33,7 @@ class NotifTables extends AbstractMigration
             'limit' => 255,
             'null' => true
         ]);
-        $tableNotif->addColumn('stat', 'text');
+        $tableNotif->addColumn('status', 'text');
         $tableNotif->create();
         
         $tableSMS =$this->table('sms_notif',['id' => false, 'primary_key' => ['id']]);
