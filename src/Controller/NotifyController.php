@@ -10,38 +10,26 @@ use NotificationWithPlivo\Controller\AppController;
  */
 class NotifyController extends AppController
 {   
-    public function index()
+    public function initialize()
     {
-        $this->loadComponent('NotificationWithPlivo.NotifyAPI');
-        $paramE = (['transport' => 'email']);
-        $e = $this->NotifyAPI->showBase($paramE);
+       parent::initialize();
+       $this->loadComponent('NotificationWithPlivo.NotifyAPI'); // Include the FlashComponent
+    }
+    
+    public function index()
+    {}
+    
+    public function sms()
+    {
         $paramS = (['transport' => 'sms']);
         $s = $this->NotifyAPI->showBase($paramS);
-        $this->set('email', $e);
         $this->set('sms', $s);
     }
     
-    public function send()
+    public function email()
     {
-       $this->loadComponent('NotificationWithPlivo.NotifyAPI');
-       $param = array ('date' => '2016-05-17');
-       $this->NotifyAPI->deleteNotification($param);
+        $paramE = (['transport' => 'email']);
+        $e = $this->NotifyAPI->showBase($paramE);
+        $this->set('email', $e);
     }
-    
-    public function add()
-    {
-        $this->loadComponent('NotificationWithPlivo.NotifyAPI');
-        
-        $params = array(
-            'transport' => 'email',
-            'text' => 'sad',
-            'subject' => 'work?',
-            'address' => 'alkatras421@mail.ru',
-            'sender' => 'alkatras421@gmail.ru'
-        );
-        
-        $this->NotifyAPI->addToBase($params);
-    }
-    
-    
 }
