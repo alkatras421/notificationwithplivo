@@ -1,4 +1,5 @@
-<?php $resultTableEmail = $this->get('sms'); ?>
+<?php $resultTableSMS = $this->get('sms'); ?>
+
 <?php if($resultTableSMS != NULL): ?>
 <h3>SMS</h3>
 <table>
