@@ -212,6 +212,18 @@ Class General
                 $this->help->delHelp($ndata);
             }
         }
+        elseif(key_exists('transport', $param))
+        {
+            $query = $this->notification->find()
+                    ->select()
+                    ->hydrate(false)
+                    ->where(['transport' => $param['transport']]);
+            
+            foreach($query as $ndata)
+            {
+                $this->help->delHelp($ndata);
+            }
+        }
     }
     
     public function showDB($param)

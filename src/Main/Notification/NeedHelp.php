@@ -15,23 +15,23 @@ Class NeedHelp
     public function delHelp($ndata)
     {
         if($ndata['transport']=='sms')
-            {
-                $query = $this->notif_sms->query();
-                $query->delete()
+        {
+            $query = $this->notif_sms->query();
+            $query->delete()
+              ->where(['notification_id' => $ndata['id']])
+              ->execute();
+        }
+
+        elseif($ndata['transport']=='email')
+        {
+            $query = $this->notif_email->query();
+            $query->delete()
                   ->where(['notification_id' => $ndata['id']])
                   ->execute();
-            }
-
-            elseif($ndata['transport']=='email')
-            {
-                $query = $this->notif_email->query();
-                $query->delete()
-                      ->where(['notification_id' => $ndata['id']])
-                      ->execute();
-            }
+        }
             
-            $id = $this->notification->get($ndata['id']);
-            $this->notification->delete($id);
+        $id = $this->notification->get($ndata['id']);
+        $this->notification->delete($id);
     }
     public function recursiveHelp($list)
     {
