@@ -4,7 +4,7 @@ namespace NotificationWithPlivo\Main\SMS;
 use Cake\ORM\TableRegistry;
 use Plivo\RestAPI;
 use NotificationWithPlivo\Main\Notification\NeedHelp;
-use Symfony\Component\Yaml\Yaml;
+use Cake\Core\Configure;
 
 
 Class SMS 
@@ -14,7 +14,8 @@ Class SMS
     
     public function __construct() 
     {
-        $plivo = Yaml::parse(file_get_contents(APP.'/../config/PlivoConfig.yml'));
+        Configure::load('PlivoConfig');
+        $plivo = Configure::read('Plivo');
         $this->plivoInst = new RestAPI($plivo['auth_id'], $plivo['auth_token']);
         
         $this->notification = TableRegistry::get('notifications');
@@ -84,8 +85,15 @@ Class SMS
     
     public function sendSingleSMS($param)
     {
-        $response = $this->plivoInst->send_message($param);
-        return $response;
+        $send = array('dst' => $param['address'], 'src' => $param['sender'], 'text' => $param['text']);
+        $response = $this->plivoInst->send_message($send);
+        if(key_exists('error', $response['response']))
+        {
+            throw new \Exception($response['response']['error']);
+        }
+        else{
+            return $response;
+        }
     }
     
     public function upStatus()
