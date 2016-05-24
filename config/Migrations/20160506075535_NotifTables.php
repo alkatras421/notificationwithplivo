@@ -45,7 +45,9 @@ class NotifTables extends AbstractMigration
         $tableSMS->addColumn('notification_id', 'integer', [
              'default' => null,
             'limit' => 11
-        ]);
+        ])
+                
+                ->addForeignKey('notification_id', 'notifications', 'id');
         $tableSMS->addColumn('record_id', 'string', [
             'default' => null,
             'limit' => 200,
@@ -61,7 +63,8 @@ class NotifTables extends AbstractMigration
             ]);
         $tableEmail->addColumn('notification_id', 'integer', [
             'limit' => 11
-        ]);
+        ])
+                   ->addForeignKey('notification_id', 'notifications', 'id');;
         $tableEmail->addColumn('subject', 'string', [
             'limit' => 100
         ]);
