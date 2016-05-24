@@ -10,6 +10,10 @@ $options = ['id'=> 'id',
     echo $this->Form->input('Search',['required' => true]);
     echo $this->Form->select('searcher', $options);
     echo $this->Form->button(__('Search'));
+    echo $this->Html->link('Cancel',
+        ['controller' => 'notifications', 'action' => 'sms'],
+        ['class' => 'button']
+    );
     echo $this->Form->end();
  ?>
 <?php if($resultTableSMS != NULL): ?>
