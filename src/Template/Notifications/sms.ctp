@@ -52,7 +52,7 @@ $options = ['id'=> 'id',
             <?= $notifSMS->recursive ?>
         </td>
         <td>
-            <?= $notifSMS->record_id ?>
+            <?= $notifSMS->sms_notification[0]->record_id ?>
         </td>
         <td>
             <?= $notifSMS->status ?>

@@ -32,6 +32,7 @@
     </tr>
     
     <?php foreach ($resultTableEmail as $notifEmail): ?>
+
     <tr>
         <td>
             <?= $notifEmail->id ?>
@@ -52,10 +53,10 @@
             <?= $notifEmail->recursive ?>
         </td>
         <td>
-            <?= $notifEmail->subject ?>
+            <?= $notifEmail->email_notification[0]->subject?>
         </td>
         <td>
-            <?= $notifEmail->sender_name ?>
+            <?= $notifEmail->email_notification[0]->sender_name ?>
         </td>
         <td>
             <?= $notifEmail->status ?>

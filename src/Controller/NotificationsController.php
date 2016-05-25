@@ -2,7 +2,6 @@
 namespace NotificationWithPlivo\Controller;
 
 use NotificationWithPlivo\Controller\AppController;
-use Cake\ORM\TableRegistry;
 /**
  * Notifications Controller
  *
@@ -10,13 +9,6 @@ use Cake\ORM\TableRegistry;
  */
 class NotificationsController extends AppController
 {
-public function initialize()
-    {
-       parent::initialize();
-       $this->loadComponent('NotificationWithPlivo.NotifyAPI');
-       $this->notification_sms = TableRegistry::get('sms_notification');
-       $this->notification_email = TableRegistry::get('email_notification');
-    }
     /**
      * Index method
      *
@@ -37,12 +29,13 @@ public function initialize()
     public function email()
     {
         $e = $this->Notifications->find()
-                        ->Where(['transport'=> 'email'])  
+                        ->Where(['transport'=> 'email'])
                         ->contain([
                             'EmailNotification' => function ($query) {
-                                return $query->find('all');
-                            }
-                        ]);           
+                    return $query->find('all');
+                }
+            ]);     
+       
         $this->set('email', $e);
      
         if($this->request->is('post'))
@@ -68,7 +61,7 @@ public function initialize()
                         ->Where(['transport'=> 'email'])    
                         ->andWhere([$this->request->data()['searcher'].' LIKE' => '%'.$this->request->data()['Search'].'%']);
                 }
-         
+                
                 $this->set('email', $queryN);
                 
         }
@@ -86,7 +79,7 @@ public function initialize()
             ]);  
            
         $this->set('sms', $s);
-        
+       
         if($this->request->is('post'))
         {   
                 if($this->request->data()['searcher'] == 'id')
@@ -110,7 +103,7 @@ public function initialize()
                         ->Where(['transport'=> 'sms'])    
                         ->andWhere([$this->request->data()['searcher'].' LIKE' => '%'.$this->request->data()['Search'].'%']);
                 }
-         
+                
                 $this->set('sms', $queryN);
                 
         }
