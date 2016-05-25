@@ -137,6 +137,10 @@ class NotifyAPIComponent extends Component
         $this->general->manipulation($param);
     }
     
+    /*
+     * Функция проверки состояния сообщений со статусом  Unavailable.
+     * Вызывает статус сообщений plivo и меняет на delivered или undelivered.
+     */
     public function checkUnavailableStatus()
     {
 	$this->SMS->checkUnavailable();
