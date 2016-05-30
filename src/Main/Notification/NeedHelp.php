@@ -84,9 +84,9 @@ Class NeedHelp
             {
                 $list->status = 'expect';
             }
-            if(($list['date'] < new \DateTime('now')) and (key_exists('datetime',$param)))
+            if(($list['date'] < new \DateTime('now')) and (key_exists('date',$param)))
             {
-                $list->date = $param['datetime'];
+                $list->date = $param['date'];
             }
             else{
                 $list->date = new \DateTime('+1 day');
