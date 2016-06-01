@@ -1,5 +1,5 @@
 {
-    "name": "alkatras421/notification-with-plivo",
+    "name": "notifications-plugin/notification-with-plivo",
     "description": "NotificationWithPlivo plugin for CakePHP",
     "type": "cakephp-plugin",
     "version": "1.0.0",
