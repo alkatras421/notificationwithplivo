@@ -1,7 +1,9 @@
 {
-    "name": "your-name-here/NotificationWithPlivo",
+    "name": "NotificationWithPlivo",
     "description": "NotificationWithPlivo plugin for CakePHP",
     "type": "cakephp-plugin",
+    "version": "1.0.0",
+    "homepage": "https://github.com/alkatras421/notificationwithplivo",
     "require": {
         "php": ">=5.4.16",
         "cakephp/cakephp": "~3.0",
@@ -13,13 +15,7 @@
         "phpunit/phpunit": "*"
     },
 
-    "scripts":{
-	"post-update-cmd":[
-	"NotificationWithPlivo\\Main\\Notification\\General::migration"]
-    },
-
     "autoload": {
-
         "psr-4": {
             "NotificationWithPlivo\\": "src"
         }

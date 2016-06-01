@@ -1,5 +1,5 @@
 {
-    "name": "NotificationWithPlivo",
+    "name": "notificationwithplivo",
     "description": "NotificationWithPlivo plugin for CakePHP",
     "type": "cakephp-plugin",
     "version": "1.0.0",
