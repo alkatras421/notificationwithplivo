@@ -140,9 +140,9 @@ Class General
                 
                 $param = array(
                     'sender' => $list['sender'],
-                    'name' => $query['sender_name'],
-                    'to' => $list['address'],
-                    'theme' => $query['subject'],
+                    'sender_name' => $query['sender_name'],
+                    'address' => $list['address'],
+                    'subject' => $query['subject'],
                     'text'=> $list['text']);
                 $this->email->sendEM($param);
                 

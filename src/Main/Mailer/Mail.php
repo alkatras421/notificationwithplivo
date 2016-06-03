@@ -47,9 +47,9 @@ Class Mail
             
             $param = array(
                 'sender' => $list['sender'],
-                'name' => $query['sender_name'],
-                'to' => $dst,
-                'theme' => $query['subject'],
+                'sender_name' => $query['sender_name'],
+                'address' => $dst,
+                'subject' => $query['subject'],
                 'text'=> $list['text']);
             $this->sendEM($param);
         }
@@ -58,8 +58,8 @@ Class Mail
     public function sendEM($param)
     {
         $email = new Email('default');
-        $email->from([$param['sender'] => $param['name']])
-              ->to($param['to'])
+        $email->from([$param['sender'] => $param['sender_name']])
+              ->to($param['address'])
               ->subject($param['subject'])
               ->send($param['text']);
         
